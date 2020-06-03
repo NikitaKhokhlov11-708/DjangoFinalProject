@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Сокращатель</title>
+    {% load bootstrap3 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+
+<body>
+<nav class="navbar navbar-default">
+    <a class="navbar-brand" href="/">Сокращатель ссылок на Django</a>
+    <ul class="nav navbar-nav">
+        <li><a href="/all">Все ссылки</a></li>
+    </ul>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="jumbotron">
+                <h2>
+                    Привет!
+                </h2>
+                <p>
+                    Здесь ты можешь сократить свою ссылку
+                </p>
+                <form class="form-horizontal" id="url_submit_form" method="POST" action="/">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <div class="control-group">
+                            <input type="url" name="url" class="form-control"
+                                   required="required"
+                                   placeholder="Вставьте ссылку"
+                                   id="url_input">
+                            {% if error %}
+                                <div class="alert alert-danger" role="alert">
+                                    Неверный формат ссылки!
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <p>
+                        <button type="submit" class="btn btn-primary btn-large">Сократить</button>
+                    </p>
+                </form>
+                {% if shorturl %}
+                    <p>Сокращенная ссылка: <a href="{{ shorturl }}">{{ shorturl }}</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
