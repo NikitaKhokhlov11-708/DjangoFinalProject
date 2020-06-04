@@ -16,9 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from URLproject.views import index
+from URLproject import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index, name='index')
+    path('', views.index, name='index'),
+    path('all/', views.all, name='all'),
+    path('delete/<int:id>', views.delete, name='delete'),
 ]

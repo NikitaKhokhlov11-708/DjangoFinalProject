@@ -7,7 +7,8 @@ from django.db import models
 
 class Link(models.Model):
     original = models.URLField()
-    hash = models.CharField(max_length=9)
+    short = models.URLField()
+    ip = models.GenericIPAddressField()
     redir_num = models.IntegerField(default=0)
 
     def get_hash(self):

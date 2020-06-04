@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from URLproject import models
 
@@ -8,7 +8,7 @@ from URLproject import models
 def index(request):
     url_error = False
     url_input = ""
-    shortened_url = ""
+    short_url = ""
 
     if request.method == "POST":
         validator = URLValidator()
@@ -23,11 +23,24 @@ def index(request):
 
         if not url_error:
             link_db = models.Link()
-            link_db.link = url_input
-            link_db.hash = link_db.get_hash()
+            link_db.original = url_input
+            link_db.short = request.build_absolute_uri(link_db.get_hash())
+            link_db.ip = request.META.get('REMOTE_ADDR')
+            # link_db.ip = request.META.get('HTTP_X_FORWARDED_FOR')
             link_db.save()
-            shortened_url = request.build_absolute_uri(link_db.hash)
-            url_input = ""
+            short_url = link_db.short
 
     return render(request, "index.html",
-                  {"error": url_error, "url": url_input, "shorturl": shortened_url})
+                  {"error": url_error, "shorturl": short_url})
+
+
+def all(request):
+    query_results = models.Link.objects.all()
+    return render(request, "all.html",
+                  {"query_results": query_results})
+
+
+def delete(request, id):
+    employee = models.Link.objects.get(id=id)
+    employee.delete()
+    return redirect("/all")
