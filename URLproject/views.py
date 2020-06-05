@@ -35,12 +35,19 @@ def index(request):
 
 
 def all(request):
-    query_results = models.Link.objects.all()
-    return render(request, "all.html",
-                  {"query_results": query_results})
+    all_results = models.Link.objects.all()
+    return render(request, "links.html",
+                  {"all_results": all_results, "all": "active"})
 
 
-def delete(request, id):
-    employee = models.Link.objects.get(id=id)
-    employee.delete()
-    return redirect("/all")
+def mine(request):
+    mine_results = models.Link.objects.all().filter(ip=request.META.get('REMOTE_ADDR'))
+    return render(request, "links.html",
+                  {"mine_results": mine_results, "mine": "active"})
+
+
+def delete(request, linkid):
+    if models.Link.objects.get(id = linkid).ip == request.META.get('REMOTE_ADDR'):
+        link = models.Link.objects.get(id=linkid)
+        link.delete()
+    return redirect("/mine")

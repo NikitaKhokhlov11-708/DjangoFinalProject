@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Сокращатель</title>
+    {% load bootstrap3 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <a class="navbar-brand" href="/">Сокращатель ссылок на Django</a>
+    <ul class="nav navbar-nav">
+        <li><a href="{% url "all" %}">Все ссылки</a></li>
+    </ul>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item {{ all }}">
+                        <a data-toggle="tab" href="{% url 'all' %}">Все</a>
+                    </li>
+                    <li class="nav-item {{ mine }}">
+                        <a data-toggle="tab" href="{% url 'mine' %}">Мои</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane {{ all }}" id="all">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Оригинальная ссылка</th>
+                                <th scope="col">Сокращенная ссылка</th>
+                                <th scope="col">IP создателя</th>
+                                <th scope="col">Кол-во переходов</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in all_results %}
+                                <tr>
+                                    <th scope="row">{{ item.id }}</th>
+                                    <td><a href="{{ item.original }}">{{ item.original }}</a></td>
+                                    <td><a href="{{ item.short }}">{{ item.short }}</a></td>
+                                    <td>{{ item.ip }}</td>
+                                    <td>{{ item.redir_num }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane {{ mine }}" id="mine">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Оригинальная ссылка</th>
+                                <th scope="col">Сокращенная ссылка</th>
+                                <th scope="col">IP создателя</th>
+                                <th scope="col">Кол-во переходов</th>
+                                <th scope="col">Действия</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in mine_results %}
+                                <tr>
+                                    <th scope="row">{{ item.id }}</th>
+                                    <td><a href="{{ item.original }}">{{ item.original }}</a></td>
+                                    <td><a href="{{ item.short }}">{{ item.short }}</a></td>
+                                    <td>{{ item.ip }}</td>
+                                    <td>{{ item.redir_num }}</td>
+                                    <td><a href="/delete/{{ item.id }}" class="glyphicon glyphicon-trash"> Удалить</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
