@@ -1,4 +1,3 @@
-import binascii
 import hashlib
 import os
 
@@ -7,7 +6,7 @@ from django.db import models
 
 class Link(models.Model):
     original = models.URLField()
-    short = models.URLField()
+    hash = models.URLField()
     ip = models.GenericIPAddressField()
     redir_num = models.IntegerField(default=0)
 
