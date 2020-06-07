@@ -7,6 +7,7 @@ from django.db import models
 class Link(models.Model):
     original = models.URLField()
     hash = models.URLField()
+    hash = models.URLField(max_length=6)
     ip = models.GenericIPAddressField()
     redir_num = models.IntegerField(default=0)
 
