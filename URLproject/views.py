@@ -1,6 +1,7 @@
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.validators import URLValidator
 from django.db.models import F
+from django.http import Http404
 from django.shortcuts import render, redirect
 
 from URLproject import models
@@ -51,10 +52,13 @@ def delete(request, linkid):
     if models.Link.objects.get(id=linkid).ip == request.META.get('REMOTE_ADDR'):
         link = models.Link.objects.get(id=linkid)
         link.delete()
-    return redirect("/mine")
+    return redirect("/mine/")
 
 
 def redir(request, linkhash):
-    link = models.Link.objects.get(hash=linkhash)
-    models.Link.objects.filter(hash=linkhash).update(redir_num=F('redir_num') + 1)
-    return redirect(link.original)
+    try:
+        link = models.Link.objects.get(hash=linkhash)
+        models.Link.objects.filter(hash=linkhash).update(redir_num=F('redir_num') + 1)
+        return redirect(link.original)
+    except ObjectDoesNotExist:
+        raise Http404("Нет такой ссылки.")
