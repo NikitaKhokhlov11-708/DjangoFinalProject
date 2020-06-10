@@ -19,6 +19,8 @@ from django.urls import path
 
 from URLproject import views
 
+handler404 = views.error_404
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
